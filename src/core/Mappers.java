@@ -11,7 +11,7 @@ public class Mappers {
             for (int j = 0; j < n; j++) {
                 int value = Integer.parseInt(board[i][j].split("")[1]);
                 String op = (board[i][j].split("")[0]);
-                cells[i][j] = new Cell(value, OPERATION_TYPE.getOperation(op));
+                cells[i][j] = new Cell(i,j,value, OPERATION_TYPE.getOperation(op));
             }
         }
         return cells;

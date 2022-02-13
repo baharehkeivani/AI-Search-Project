@@ -11,4 +11,16 @@ public class Board {
         this.cells = cells;
 
     }
+
+    public int getCol() {
+        return col;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public Cell[][] getCells() {
+        return cells;
+    }
 }

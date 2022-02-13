@@ -7,26 +7,24 @@ public enum OPERATION_TYPE {
     START,
     MULT,
     POW,
+    WALL,
+    DECREASE_GOAL,
+    INCREASE_GOAL,
     UNDEFINED;
 
 
     public static OPERATION_TYPE getOperation(String op) {
-        switch (op) {
-            case "-":
-                return MINUS;
-            case "+":
-                return ADD;
-            case "g":
-                return GOAL;
-            case "*":
-                return MULT;
-            case "^":
-                return POW;
-            case "s":
-                return START;
-            default:
-                return UNDEFINED;
-
-        }
+        return switch (op) {
+            case "-" -> MINUS;
+            case "+" -> ADD;
+            case "g" -> GOAL;
+            case "*" -> MULT;
+            case "^" -> POW;
+            case "s" -> START;
+            case "w" -> WALL;
+            case "a" -> INCREASE_GOAL;
+            case "b" -> DECREASE_GOAL;
+            default -> UNDEFINED;
+        };
     }
 }
