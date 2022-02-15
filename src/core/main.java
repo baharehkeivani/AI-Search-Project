@@ -1,5 +1,8 @@
 package core;
 
+import model.Board;
+import model.Cell;
+
 import java.util.Scanner;
 
 public class main {
@@ -15,6 +18,7 @@ public class main {
     }
 
     public static void main(String[] args) {
+        System.out.println("hi !! pls enter m and n : \n");
         Scanner sc = new Scanner(System.in);
         String mn = sc.nextLine();
         int m = Integer.parseInt(mn.split(" ")[0]);
@@ -28,6 +32,10 @@ public class main {
                 board[i][j] = line[j];
             }
         }
-        printBoard(board,m,n);
+        Mapper mapper = new Mapper();
+        Cell[][] cells = mapper.createCells(board, m, n);
+        Board gameBoard=mapper.createBoard(cells,m,n);
+        System.out.println("salam");
+        System.out.print(gameBoard.toString());
     }
 }

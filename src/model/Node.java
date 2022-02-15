@@ -11,15 +11,7 @@ public class Node {
     private Cell currentCell; //pointer
     public OPERATION_TYPE previousOperation;
     private Cell[][] cells;
-    //todo do this with list
-//    private Node right = null;
-//    private Node left = null;
-//    private Node up = null;
-//    private Node down = null;
 
-    //
-//    public Node(Cell startCell) {
-//        Node.start = new Node();
     public Node(Cell currentCell, int currentValue, Board board) {
         if (!startSet && currentCell.getOperationType() == OPERATION_TYPE.START) {
             this.isStart = true;
@@ -29,11 +21,10 @@ public class Node {
         this.value = currentValue;
         this.board = board;
         this.cells = board.getCells();
-//        this.addNeibours(cells);
     }
 
-    //    }
-    public ArrayList<Node> succesor() {
+
+    public ArrayList<Node> successor() {
         ArrayList<Node> result = new ArrayList<Node>();
         if (canMoveRight()) {
             Cell rightCell = this.cells[this.currentCell.i][this.currentCell.j + 1];
@@ -95,6 +86,11 @@ public class Node {
             }
         }
         return false;
+    }
+
+    public int pathCost(){
+        //todo return past cost
+        return  1;
     }
 
 }

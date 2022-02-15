@@ -1,5 +1,7 @@
 package model;
 
+import core.Constants;
+
 public class Board {
     private int row;
     private int col;
@@ -23,4 +25,22 @@ public class Board {
     public Cell[][] getCells() {
         return cells;
     }
+
+    @Override
+    public String toString() {
+        //todo needs a refactor
+        StringBuilder map = new StringBuilder();
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                map.append(Constants.ANSI_BRIGHT_BLUE)
+                        .append(OPERATION_TYPE.getOperationTag(cells[i][j].getOperationType()))
+                        .append(cells[i][j].getValue())
+                        .append("\t\t");
+
+            }
+            map.append("\n");
+        }
+        return map.toString();
+    }
+
 }

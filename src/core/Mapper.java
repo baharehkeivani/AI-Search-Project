@@ -4,14 +4,14 @@ import model.Board;
 import model.Cell;
 import model.OPERATION_TYPE;
 
-public class Mappers {
+public class Mapper {
     public Cell[][] createCells(String[][] board, int m, int n) {
         Cell[][] cells = new Cell[m][n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                int value = Integer.parseInt(board[i][j].split("")[1]);
                 String op = (board[i][j].split("")[0]);
-                cells[i][j] = new Cell(i,j,value, OPERATION_TYPE.getOperation(op));
+                int value = Integer.parseInt(board[i][j].substring(1));
+                cells[i][j] = new Cell(i,j,value, op);
             }
         }
         return cells;

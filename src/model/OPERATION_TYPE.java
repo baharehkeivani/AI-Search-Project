@@ -1,5 +1,7 @@
 package model;
 
+import core.Constants;
+
 public enum OPERATION_TYPE {
     MINUS,
     ADD,
@@ -25,6 +27,21 @@ public enum OPERATION_TYPE {
             case "a" -> INCREASE_GOAL;
             case "b" -> DECREASE_GOAL;
             default -> UNDEFINED;
+        };
+    }
+
+    public static String getOperationTag(OPERATION_TYPE opt) {
+        return switch (opt) {
+            case MINUS -> "-";
+            case ADD -> "+";
+            case MULT -> "*";
+            case POW -> "^";
+            case GOAL -> Constants.GOAL;
+            case START -> Constants.START;
+            case WALL -> Constants.WALL;
+            case INCREASE_GOAL -> Constants.FLOWER;
+            case DECREASE_GOAL -> Constants.BOMB;
+            default -> " ";
         };
     }
 }
