@@ -7,10 +7,12 @@ public class Cell {
     private OPERATION_TYPE operationType;
     public static Cell start;
     public static Cell goal;
+    public String op;
 
     public Cell(int i, int j, int value, String op) {
         this.i = i;
         this.j = j;
+        this.op=op;
         this.value = value;
         this.operationType=OPERATION_TYPE.getOperation(op);
         if (this.operationType == OPERATION_TYPE.GOAL) goal = this;

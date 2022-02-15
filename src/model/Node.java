@@ -6,9 +6,9 @@ public class Node {
     public Board board;
     public static boolean startSet = false;
     public boolean isStart = false;
-    int value = 0;
-    private Node parent;
-    private Cell currentCell; //pointer
+    public int sum = 0;
+    public Node parent;
+    public Cell currentCell; //pointer
     public OPERATION_TYPE previousOperation;
     private Cell[][] cells;
 
@@ -18,7 +18,7 @@ public class Node {
             startSet = true;
         }
         this.currentCell = currentCell;
-        this.value = currentValue;
+        this.sum = currentValue;
         this.board = board;
         this.cells = board.getCells();
     }
@@ -28,26 +28,26 @@ public class Node {
         ArrayList<Node> result = new ArrayList<Node>();
         if (canMoveRight()) {
             Cell rightCell = this.cells[this.currentCell.i][this.currentCell.j + 1];
-            int calculatedValue = rightCell.calculate(this.value);
+            int calculatedValue = rightCell.calculate(this.sum);
             Node rightNode = new Node(rightCell, calculatedValue, board);
             result.add(rightNode);
         }
         if (canMoveLeft()) {
             Cell leftCell = this.cells[this.currentCell.i][this.currentCell.j - 1];
-            int calculatedValue = leftCell.calculate(this.value);
+            int calculatedValue = leftCell.calculate(this.sum);
             Node leftNode = new Node(leftCell, calculatedValue, board);
             result.add(leftNode);
         }
         if (canMoveDown()) {
             Cell downCell = this.cells[this.currentCell.i + 1][this.currentCell.j];
-            int calculatedValue = downCell.calculate(this.value);
+            int calculatedValue = downCell.calculate(this.sum);
             Node downNode = new Node(downCell, calculatedValue, board);
             result.add(downNode);
 
         }
         if (canMoveUp()) {
             Cell upCell = this.cells[this.currentCell.i - 1][this.currentCell.j];
-            int calculatedValue = upCell.calculate(this.value);
+            int calculatedValue = upCell.calculate(this.sum);
             Node upNode = new Node(upCell, calculatedValue, board);
             result.add(upNode);
         }
@@ -79,7 +79,7 @@ public class Node {
 
     public boolean isGoal() {
         if (currentCell.getOperationType() == OPERATION_TYPE.GOAL) {
-            if (value >= Cell.goal.getValue()) {
+            if (sum >= Cell.goal.getValue()) {
                 return true;
             } else {
                 return false;
@@ -88,9 +88,25 @@ public class Node {
         return false;
     }
 
-    public int pathCost(){
+    public int pathCost() {
         //todo return past cost
-        return  1;
+        return 1;
+    }
+
+    public String hash() {
+        StringBuilder hash = new StringBuilder();
+        hash.append("i:")
+                .append(currentCell.i)
+                .append("j:")
+                .append(currentCell.j)
+                .append("sum:")
+                .append(sum)
+                .append("op:")
+                .append(currentCell.op)
+                .append("val:")
+                .append(currentCell.getValue());
+
+        return hash.toString();
     }
 
 }
