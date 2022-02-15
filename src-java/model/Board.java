@@ -35,7 +35,7 @@ public class Board {
                 map.append(Constants.ANSI_BRIGHT_BLUE)
                         .append(OPERATION_TYPE.getOperationTag(cells[i][j].getOperationType()))
                         .append(cells[i][j].getValue())
-                        .append("\t\t");
+                        .append("\t");
 
             }
             map.append("\n");

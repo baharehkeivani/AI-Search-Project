@@ -12,9 +12,9 @@ public class Cell {
     public Cell(int i, int j, int value, String op) {
         this.i = i;
         this.j = j;
-        this.op=op;
+        this.op = op;
         this.value = value;
-        this.operationType=OPERATION_TYPE.getOperation(op);
+        this.operationType = OPERATION_TYPE.getOperation(op);
         if (this.operationType == OPERATION_TYPE.GOAL) goal = this;
         if (this.operationType == OPERATION_TYPE.START) start = this;
     }
@@ -24,7 +24,7 @@ public class Cell {
         return switch (this.operationType) {
             case MINUS -> previousValue - value;
             case ADD -> previousValue + value;
-            case POW -> (int) Math.pow(previousValue,  value);
+            case POW -> (int) Math.pow(previousValue, value);
             case MULT -> previousValue * value;
             case DECREASE_GOAL -> goal.value - value;
             case INCREASE_GOAL -> goal.value + value;

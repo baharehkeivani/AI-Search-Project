@@ -15,7 +15,7 @@ public class BFS {
         Hashtable<String, Boolean> explored = new Hashtable<>();
         if (startNode.isGoal()) {
             System.out.println(startNode.sum);
-            printResult(startNode,0);
+            printResult(startNode, 0);
             return;
         }
         frontier.add(startNode);
@@ -25,17 +25,15 @@ public class BFS {
             inFrontier.remove(temp.hash());
             explored.put(temp.hash(), true);
             ArrayList<Node> children = temp.successor();
-            for (int i = 0; i < children.size(); i++) {
-                if (!(inFrontier.containsKey(children.get(i).hash())) && !(explored.containsKey(children.get(i).hash()))) {
-                    if (children.get(i).isGoal()) {
-//                        result(children.get(i));
-                        printResult(children.get(i),0);
-                        System.out.println(children.get(i).sum);
-
+            for (Node child : children) {
+                if (!(inFrontier.containsKey(child.hash())) && !(explored.containsKey(child.hash()))) {
+                    if (child.isGoal()) {
+                        printResult(child, 0);
+                        System.out.println(child.sum);
                         return;
                     }
-                    frontier.add(children.get(i));
-                    inFrontier.put(children.get(i).hash(), true);
+                    frontier.add(child);
+                    inFrontier.put(child.hash(), true);
                 }
             }
         }
@@ -45,12 +43,13 @@ public class BFS {
 
     public void printResult(Node node, int depthCounter) {
         if (node.parent == null) {
-            System.out.println("problem solved within depth of  : " + depthCounter);
+            System.out.println("problem solved at a depth of  : " + depthCounter);
             return;
         }
 
-        System.out.println("(" + node.currentCell.getI() + "," + node.currentCell.getJ() + ")");
-        printResult(node.parent, depthCounter+1);
+        System.out.println(node.toString());
+        node.drawState();
+        printResult(node.parent, depthCounter + 1);
     }
 
 

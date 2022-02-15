@@ -1,5 +1,7 @@
 package model;
 
+import core.Constants;
+
 import java.util.ArrayList;
 
 public class Node {
@@ -91,8 +93,13 @@ public class Node {
     }
 
     public int pathCost() {
-        //todo return past cost
+        //todo return path cost
         return 1;
+    }
+
+    public int heuristic() {
+        // TODO: 2/16/2022 implement heuristic function
+        return 0;
     }
 
     public String hash() {
@@ -111,5 +118,27 @@ public class Node {
         return hash.toString();
     }
 
+    public void drawState() {
 
+        for (int i = 0; i < board.getRow(); i++) {
+            for (int j = 0; j < board.getCol(); j++) {
+                if (currentCell.getJ() == j && currentCell.getI() == i) {
+                    System.out.print(Constants.ANSI_BRIGHT_GREEN + Constants.PLAYER + sum + "\t");
+                } else {
+                    System.out.print(Constants.ANSI_BRIGHT_GREEN +
+                            OPERATION_TYPE.getOperationTag(cells[i][j].getOperationType())
+                            + cells[i][j].getValue() + "\t");
+                }
+            }
+            System.out.println();
+
+        }
+        System.out.println("-----------------------------------------");
+
+    }
+
+    @Override
+    public String toString() {
+        return "(" + this.currentCell.getI() + "," + this.currentCell.getJ() + ")";
+    }
 }

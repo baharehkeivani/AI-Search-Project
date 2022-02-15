@@ -2,7 +2,6 @@ package core;
 
 import model.Board;
 import model.Cell;
-import model.OPERATION_TYPE;
 
 public class Mapper {
     public Cell[][] createCells(String[][] board, int m, int n) {
@@ -11,14 +10,14 @@ public class Mapper {
             for (int j = 0; j < n; j++) {
                 String op = (board[i][j].split("")[0]);
                 int value = Integer.parseInt(board[i][j].substring(1));
-                cells[i][j] = new Cell(i,j,value, op);
+                cells[i][j] = new Cell(i, j, value, op);
             }
         }
         return cells;
     }
 
-    public Board createBoard(Cell[][] cells,int row ,int col ){
-        return new Board(row,col,cells);
+    public Board createBoard(Cell[][] cells, int row, int col) {
+        return new Board(row, col, cells);
     }
 
 }

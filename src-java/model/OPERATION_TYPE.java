@@ -37,7 +37,7 @@ public enum OPERATION_TYPE {
             case MULT -> "*";
             case POW -> "^";
             case GOAL -> Constants.GOAL;
-            case START -> Constants.START;
+            case START -> Constants.CASTLE;
             case WALL -> Constants.WALL;
             case INCREASE_GOAL -> Constants.FLOWER;
             case DECREASE_GOAL -> Constants.BOMB;
