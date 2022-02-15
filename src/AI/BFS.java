@@ -15,7 +15,8 @@ public class BFS {
         Hashtable<String, Boolean> explored = new Hashtable<>();
         if (startNode.isGoal()) {
             System.out.println("hooray");
-            // TODO: 2/15/2022 propagate back and print result
+            System.out.println(startNode.sum);
+            printResult(startNode);
             return;
         }
         frontier.add(startNode);
@@ -29,7 +30,10 @@ public class BFS {
                 if (!(inFrontier.containsKey(children.get(i).hash())) && !(explored.containsKey(children.get(i).hash()))) {
                     if (children.get(i).isGoal()) {
 //                        result(children.get(i));
-                        System.out.println("hooray");
+                        printResult(children.get(i));
+                        System.out.println("hooray2");
+                        System.out.println(children.get(i).sum);
+
                         return;
                     }
                     frontier.add(children.get(i));
@@ -42,7 +46,9 @@ public class BFS {
     }
 
     public void printResult(Node node) {
-        // TODO: 2/15/2022
+        if (node.parent==null) return;
+        System.out.println("(" +node.currentCell.getI() +","+node.currentCell.getJ() + ")");
+        printResult(node.parent);
     }
 
 

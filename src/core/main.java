@@ -1,7 +1,9 @@
 package core;
 
+import AI.BFS;
 import model.Board;
 import model.Cell;
+import model.Node;
 
 import java.util.Scanner;
 
@@ -37,5 +39,10 @@ public class main {
         Board gameBoard=mapper.createBoard(cells,m,n);
         System.out.println("salam");
         System.out.print(gameBoard.toString());
+        Node start =new Node(Cell.start,Cell.start.getValue(),gameBoard);
+        BFS bfs=new BFS();
+        bfs.search(start);
+        System.out.println("done");
+
     }
 }

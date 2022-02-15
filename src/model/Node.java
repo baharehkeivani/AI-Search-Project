@@ -28,28 +28,36 @@ public class Node {
         ArrayList<Node> result = new ArrayList<Node>();
         if (canMoveRight()) {
             Cell rightCell = this.cells[this.currentCell.i][this.currentCell.j + 1];
-            int calculatedValue = rightCell.calculate(this.sum);
-            Node rightNode = new Node(rightCell, calculatedValue, board);
-            result.add(rightNode);
+            if (rightCell!=Cell.start) {
+                int calculatedValue = rightCell.calculate(this.sum);
+                Node rightNode = new Node(rightCell, calculatedValue, board);
+                result.add(rightNode);
+            }
         }
         if (canMoveLeft()) {
             Cell leftCell = this.cells[this.currentCell.i][this.currentCell.j - 1];
-            int calculatedValue = leftCell.calculate(this.sum);
-            Node leftNode = new Node(leftCell, calculatedValue, board);
-            result.add(leftNode);
+           if (leftCell!=Cell.start) {
+               int calculatedValue = leftCell.calculate(this.sum);
+               Node leftNode = new Node(leftCell, calculatedValue, board);
+               result.add(leftNode);
+           }
         }
         if (canMoveDown()) {
             Cell downCell = this.cells[this.currentCell.i + 1][this.currentCell.j];
-            int calculatedValue = downCell.calculate(this.sum);
-            Node downNode = new Node(downCell, calculatedValue, board);
-            result.add(downNode);
+            if (downCell!=Cell.start) {
+                int calculatedValue = downCell.calculate(this.sum);
+                Node downNode = new Node(downCell, calculatedValue, board);
+                result.add(downNode);
+            }
 
         }
         if (canMoveUp()) {
             Cell upCell = this.cells[this.currentCell.i - 1][this.currentCell.j];
-            int calculatedValue = upCell.calculate(this.sum);
-            Node upNode = new Node(upCell, calculatedValue, board);
-            result.add(upNode);
+            if (upCell!=Cell.start) {
+                int calculatedValue = upCell.calculate(this.sum);
+                Node upNode = new Node(upCell, calculatedValue, board);
+                result.add(upNode);
+            }
         }
         return result;
     }
@@ -62,7 +70,7 @@ public class Node {
 
 
     public boolean canMoveRight() {
-        return this.currentCell.j < this.board.getRow();
+        return this.currentCell.j < this.board.getRow() - 1;
     }
 
     public boolean canMoveLeft() {
@@ -74,7 +82,7 @@ public class Node {
     }
 
     public boolean canMoveDown() {
-        return this.currentCell.i < this.board.getCol();
+        return this.currentCell.i < this.board.getCol() - 1;
     }
 
     public boolean isGoal() {
@@ -108,5 +116,6 @@ public class Node {
 
         return hash.toString();
     }
+
 
 }

@@ -40,4 +40,12 @@ public class Cell {
     public OPERATION_TYPE getOperationType() {
         return operationType;
     }
+
+    public int getI() {
+        return i;
+    }
+
+    public int getJ() {
+        return j;
+    }
 }
