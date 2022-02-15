@@ -14,9 +14,8 @@ public class BFS {
         Hashtable<String, Boolean> inFrontier = new Hashtable<>();
         Hashtable<String, Boolean> explored = new Hashtable<>();
         if (startNode.isGoal()) {
-            System.out.println("hooray");
             System.out.println(startNode.sum);
-            printResult(startNode);
+            printResult(startNode,0);
             return;
         }
         frontier.add(startNode);
@@ -30,8 +29,7 @@ public class BFS {
                 if (!(inFrontier.containsKey(children.get(i).hash())) && !(explored.containsKey(children.get(i).hash()))) {
                     if (children.get(i).isGoal()) {
 //                        result(children.get(i));
-                        printResult(children.get(i));
-                        System.out.println("hooray2");
+                        printResult(children.get(i),0);
                         System.out.println(children.get(i).sum);
 
                         return;
@@ -45,10 +43,14 @@ public class BFS {
 
     }
 
-    public void printResult(Node node) {
-        if (node.parent==null) return;
-        System.out.println("(" +node.currentCell.getI() +","+node.currentCell.getJ() + ")");
-        printResult(node.parent);
+    public void printResult(Node node, int depthCounter) {
+        if (node.parent == null) {
+            System.out.println("problem solved within depth of  : " + depthCounter);
+            return;
+        }
+
+        System.out.println("(" + node.currentCell.getI() + "," + node.currentCell.getJ() + ")");
+        printResult(node.parent, depthCounter+1);
     }
 
 

@@ -20,7 +20,7 @@ public class main {
     }
 
     public static void main(String[] args) {
-        System.out.println("hi !! pls enter m and n : \n");
+        System.out.println(" pls enter rows and cols of your board : \n");
         Scanner sc = new Scanner(System.in);
         String mn = sc.nextLine();
         int m = Integer.parseInt(mn.split(" ")[0]);
@@ -37,9 +37,8 @@ public class main {
         Mapper mapper = new Mapper();
         Cell[][] cells = mapper.createCells(board, m, n);
         Board gameBoard=mapper.createBoard(cells,m,n);
-        System.out.println("salam");
         System.out.print(gameBoard.toString());
-        Node start =new Node(Cell.start,Cell.start.getValue(),gameBoard);
+        Node start =new Node(Cell.start,Cell.start.getValue(),gameBoard,null);
         BFS bfs=new BFS();
         bfs.search(start);
         System.out.println("done");
