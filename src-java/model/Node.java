@@ -13,8 +13,9 @@ public class Node {
     public Cell currentCell;
     public ACTION_TYPE previousAction;
     private Cell[][] cells;
+    private int goalValue;
 
-    public Node(Cell currentCell, int currentValue, Board board, Node parent, ACTION_TYPE previousAction) {
+    public Node(Cell currentCell, int currentValue,int goalValue, Board board, Node parent, ACTION_TYPE previousAction) {
         if (!startSet && currentCell.getOperationType() == OPERATION_TYPE.START) {
             this.isStart = true;
             startSet = true;
@@ -25,6 +26,7 @@ public class Node {
         this.cells = board.getCells();
         this.parent = parent;
         this.previousAction = previousAction;
+        this.goalValue=goalValue;
         setGoalValue();
     }
 
@@ -35,7 +37,7 @@ public class Node {
             Cell rightCell = this.cells[this.currentCell.i][this.currentCell.j + 1];
             if (rightCell != Cell.getStart() && !isWall(rightCell) && previousAction != ACTION_TYPE.RIGHT) {
                 int calculatedValue = calculate(rightCell);
-                Node rightNode = new Node(rightCell, calculatedValue, board, this, ACTION_TYPE.LEFT);
+                Node rightNode = new Node(rightCell, calculatedValue,goalValue, board, this, ACTION_TYPE.LEFT);
                 result.add(rightNode);
             }
         }
@@ -43,7 +45,7 @@ public class Node {
             Cell leftCell = this.cells[this.currentCell.i][this.currentCell.j - 1];
             if (leftCell != Cell.getStart() && !isWall(leftCell) && previousAction != ACTION_TYPE.LEFT) {
                 int calculatedValue = calculate(leftCell);
-                Node leftNode = new Node(leftCell, calculatedValue, board, this, ACTION_TYPE.RIGHT);
+                Node leftNode = new Node(leftCell, calculatedValue,goalValue, board, this, ACTION_TYPE.RIGHT);
                 result.add(leftNode);
             }
         }
@@ -51,7 +53,7 @@ public class Node {
             Cell downCell = this.cells[this.currentCell.i + 1][this.currentCell.j];
             if (downCell != Cell.getStart() && !isWall(downCell) && previousAction != ACTION_TYPE.DOWN) {
                 int calculatedValue = calculate(downCell);
-                Node downNode = new Node(downCell, calculatedValue, board, this, ACTION_TYPE.UP);
+                Node downNode = new Node(downCell, calculatedValue,goalValue, board, this, ACTION_TYPE.UP);
                 result.add(downNode);
             }
 
@@ -60,7 +62,7 @@ public class Node {
             Cell upCell = this.cells[this.currentCell.i - 1][this.currentCell.j];
             if (upCell != Cell.getStart() && !isWall(upCell) && previousAction != ACTION_TYPE.UP) {
                 int calculatedValue = calculate(upCell);
-                Node upNode = new Node(upCell, calculatedValue, board, this, ACTION_TYPE.DOWN);
+                Node upNode = new Node(upCell, calculatedValue,goalValue, board, this, ACTION_TYPE.DOWN);
                 result.add(upNode);
             }
         }
@@ -101,7 +103,7 @@ public class Node {
 
     public boolean isGoal() {
         if (currentCell.getOperationType() == OPERATION_TYPE.GOAL) {
-            return sum >= Cell.getGoal().getValue();
+            return sum >= goalValue;
         }
         return false;
     }
@@ -136,6 +138,13 @@ public class Node {
 
         for (int i = 0; i < board.getRow(); i++) {
             for (int j = 0; j < board.getCol(); j++) {
+                if (cells[i][j].getOperationType()==OPERATION_TYPE.GOAL){
+                    System.out.print(Constants.ANSI_BRIGHT_GREEN +
+                            OPERATION_TYPE.getOperationTag(cells[i][j].getOperationType())
+                            + goalValue + spaceRequired(cells[i][j])
+                    );
+                    continue;
+                }
                 if (currentCell.j == j && currentCell.i == i) {
                     System.out.print(Constants.ANSI_BRIGHT_GREEN + Constants.PLAYER + sum + spaceRequired(cells[i][j]));
                 } else {
@@ -154,9 +163,9 @@ public class Node {
 
     private void setGoalValue() {
         if (currentCell.getOperationType() == OPERATION_TYPE.DECREASE_GOAL)
-            cells[currentCell.i][currentCell.j].setValue(-1 * currentCell.getValue());
+            goalValue-=currentCell.getValue();
         if (currentCell.getOperationType() == OPERATION_TYPE.INCREASE_GOAL)
-            cells[currentCell.i][currentCell.j].setValue(currentCell.getValue());
+            goalValue+=currentCell.getValue();
     }
 
     private String spaceRequired(Cell cell) {

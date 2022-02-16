@@ -26,10 +26,8 @@ public class main {
         Mapper mapper = new Mapper();
         Cell[][] cells = mapper.createCells(board, rows, columns);
         Board gameBoard = mapper.createBoard(cells, rows, columns);
-        Node start = new Node(Cell.getStart(), Cell.getStart().getValue(), gameBoard, null, ACTION_TYPE.LEFT);
+        Node start = new Node(Cell.getStart(), Cell.getStart().getValue(), Cell.getGoal().getValue(), gameBoard, null, ACTION_TYPE.LEFT);
         BFS bfs = new BFS();
         bfs.search(start);
-        System.out.println("done");
-
     }
 }

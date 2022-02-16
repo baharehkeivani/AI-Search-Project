@@ -14,7 +14,7 @@ public class BFS {
         Hashtable<String, Boolean> inFrontier = new Hashtable<>();
         Hashtable<String, Boolean> explored = new Hashtable<>();
         if (startNode.isGoal()) {
-            System.out.println(startNode.sum);
+            System.out.println("score : " + startNode.sum);
             printResult(startNode, 0);
             return;
         }
