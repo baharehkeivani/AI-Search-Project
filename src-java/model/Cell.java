@@ -5,9 +5,9 @@ public class Cell {
     int j;
     private int value;
     private OPERATION_TYPE operationType;
-    public static Cell start;
-    public static Cell goal;
     public String op;
+    private static Cell start;
+    private static Cell goal;
 
     public Cell(int i, int j, int value, String op) {
         this.i = i;
@@ -19,33 +19,39 @@ public class Cell {
         if (this.operationType == OPERATION_TYPE.START) start = this;
     }
 
-    public int calculate(int previousValue) {
-
-        return switch (this.operationType) {
-            case MINUS -> previousValue - value;
-            case ADD -> previousValue + value;
-            case POW -> (int) Math.pow(previousValue, value);
-            case MULT -> previousValue * value;
-            case DECREASE_GOAL -> goal.value - value;
-            case INCREASE_GOAL -> goal.value + value;
-            default -> previousValue;
-        };
-
-    }
+//    public int calculate(int previousValue) {
+//
+//        return switch (this.operationType) {
+//            case MINUS -> previousValue - value;
+//            case ADD -> previousValue + value;
+//            case POW -> (int) Math.pow(previousValue, value);
+//            case MULT -> previousValue * value;
+//            case DECREASE_GOAL -> goal.value -= value;
+//            case INCREASE_GOAL -> goal.value += value;
+//            default -> previousValue;
+//        };
+//
+//    }
 
     public int getValue() {
         return value;
+    }
+
+    public static Cell getGoal() {
+        return goal;
+    }
+
+    public static Cell getStart() {
+        return start;
+    }
+
+    public void setValue(int value) {
+        if (operationType==OPERATION_TYPE.GOAL)
+            this.value = value;
     }
 
     public OPERATION_TYPE getOperationType() {
         return operationType;
     }
 
-    public int getI() {
-        return i;
-    }
-
-    public int getJ() {
-        return j;
-    }
 }

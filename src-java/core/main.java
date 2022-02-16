@@ -1,6 +1,7 @@
 package core;
 
 import AI.BFS;
+import model.ACTION_TYPE;
 import model.Board;
 import model.Cell;
 import model.Node;
@@ -24,14 +25,9 @@ public class main {
         }
         Mapper mapper = new Mapper();
         Cell[][] cells = mapper.createCells(board, rows, columns);
-        Board gameBoard=mapper.createBoard(cells,rows,columns);
-        System.out.println(" ---- map ----");
-        System.out.print(gameBoard.toString());
-        System.out.println(" ----     ----");
-
-
-        Node start =new Node(Cell.start,Cell.start.getValue(),gameBoard,null);
-        BFS bfs=new BFS();
+        Board gameBoard = mapper.createBoard(cells, rows, columns);
+        Node start = new Node(Cell.getStart(), Cell.getStart().getValue(), gameBoard, null, ACTION_TYPE.LEFT);
+        BFS bfs = new BFS();
         bfs.search(start);
         System.out.println("done");
 
