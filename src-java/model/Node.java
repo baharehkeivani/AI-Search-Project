@@ -110,8 +110,14 @@ public class Node {
     }
 
     public int pathCost() {
-        // TODO: 2/18/2022 return path cost  
-        return 1;
+        return switch (currentCell.getOperationType()) {
+            case MINUS, DECREASE_GOAL -> 1;
+            case ADD, INCREASE_GOAL -> 2;
+            case MULT -> 3;
+            case POW -> 4;
+            default -> 0;
+        };
+
     }
 
     private int heuristic() {
