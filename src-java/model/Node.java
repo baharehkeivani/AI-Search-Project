@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 public class Node {
     public Board board;
-    public static boolean startSet = false;
+    // TODO: 2/18/2022  never used, you can remove these 2 lines and related logics.
+    public static boolean isStartSet = false;
     public boolean isStart = false;
     public int sum = 0;
     public Node parent;
@@ -15,10 +16,10 @@ public class Node {
     private Cell[][] cells;
     private int goalValue;
 
-    public Node(Cell currentCell, int currentValue,int goalValue, Board board, Node parent, ACTION_TYPE previousAction) {
-        if (!startSet && currentCell.getOperationType() == OPERATION_TYPE.START) {
+    public Node(Cell currentCell, int currentValue, int goalValue, Board board, Node parent, ACTION_TYPE previousAction) {
+        if (!isStartSet && currentCell.getOperationType() == OPERATION_TYPE.START) {
             this.isStart = true;
-            startSet = true;
+            isStartSet = true;
         }
         this.currentCell = currentCell;
         this.sum = currentValue;
@@ -26,7 +27,7 @@ public class Node {
         this.cells = board.getCells();
         this.parent = parent;
         this.previousAction = previousAction;
-        this.goalValue=goalValue;
+        this.goalValue = goalValue;
         setGoalValue();
     }
 
@@ -37,7 +38,7 @@ public class Node {
             Cell rightCell = this.cells[this.currentCell.i][this.currentCell.j + 1];
             if (rightCell != Cell.getStart() && !isWall(rightCell) && previousAction != ACTION_TYPE.RIGHT) {
                 int calculatedValue = calculate(rightCell);
-                Node rightNode = new Node(rightCell, calculatedValue,goalValue, board, this, ACTION_TYPE.LEFT);
+                Node rightNode = new Node(rightCell, calculatedValue, goalValue, board, this, ACTION_TYPE.LEFT);
                 result.add(rightNode);
             }
         }
@@ -45,7 +46,7 @@ public class Node {
             Cell leftCell = this.cells[this.currentCell.i][this.currentCell.j - 1];
             if (leftCell != Cell.getStart() && !isWall(leftCell) && previousAction != ACTION_TYPE.LEFT) {
                 int calculatedValue = calculate(leftCell);
-                Node leftNode = new Node(leftCell, calculatedValue,goalValue, board, this, ACTION_TYPE.RIGHT);
+                Node leftNode = new Node(leftCell, calculatedValue, goalValue, board, this, ACTION_TYPE.RIGHT);
                 result.add(leftNode);
             }
         }
@@ -53,7 +54,7 @@ public class Node {
             Cell downCell = this.cells[this.currentCell.i + 1][this.currentCell.j];
             if (downCell != Cell.getStart() && !isWall(downCell) && previousAction != ACTION_TYPE.DOWN) {
                 int calculatedValue = calculate(downCell);
-                Node downNode = new Node(downCell, calculatedValue,goalValue, board, this, ACTION_TYPE.UP);
+                Node downNode = new Node(downCell, calculatedValue, goalValue, board, this, ACTION_TYPE.UP);
                 result.add(downNode);
             }
 
@@ -62,7 +63,7 @@ public class Node {
             Cell upCell = this.cells[this.currentCell.i - 1][this.currentCell.j];
             if (upCell != Cell.getStart() && !isWall(upCell) && previousAction != ACTION_TYPE.UP) {
                 int calculatedValue = calculate(upCell);
-                Node upNode = new Node(upCell, calculatedValue,goalValue, board, this, ACTION_TYPE.DOWN);
+                Node upNode = new Node(upCell, calculatedValue, goalValue, board, this, ACTION_TYPE.DOWN);
                 result.add(upNode);
             }
         }
@@ -108,8 +109,8 @@ public class Node {
         return false;
     }
 
-    private int pathCost() {
-        //todo return path cost
+    public int pathCost() {
+        // TODO: 2/18/2022 return path cost  
         return 1;
     }
 
@@ -138,7 +139,7 @@ public class Node {
 
         for (int i = 0; i < board.getRow(); i++) {
             for (int j = 0; j < board.getCol(); j++) {
-                if (cells[i][j].getOperationType()==OPERATION_TYPE.GOAL){
+                if (cells[i][j].getOperationType() == OPERATION_TYPE.GOAL) {
                     System.out.print(Constants.ANSI_BRIGHT_GREEN +
                             OPERATION_TYPE.getOperationTag(cells[i][j].getOperationType())
                             + goalValue + spaceRequired(cells[i][j])
@@ -163,9 +164,9 @@ public class Node {
 
     private void setGoalValue() {
         if (currentCell.getOperationType() == OPERATION_TYPE.DECREASE_GOAL)
-            goalValue-=currentCell.getValue();
+            goalValue -= currentCell.getValue();
         if (currentCell.getOperationType() == OPERATION_TYPE.INCREASE_GOAL)
-            goalValue+=currentCell.getValue();
+            goalValue += currentCell.getValue();
     }
 
     private String spaceRequired(Cell cell) {
