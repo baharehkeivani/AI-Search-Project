@@ -1,11 +1,11 @@
 package core;
 
 import AI.BFS;
-import model.ACTION_TYPE;
 import model.Board;
 import model.Cell;
 import model.Node;
 
+import java.util.Hashtable;
 import java.util.Scanner;
 
 public class main {
@@ -26,7 +26,9 @@ public class main {
         Mapper mapper = new Mapper();
         Cell[][] cells = mapper.createCells(board, rows, columns);
         Board gameBoard = mapper.createBoard(cells, rows, columns);
-        Node start = new Node(Cell.getStart(), Cell.getStart().getValue(), Cell.getGoal().getValue(), gameBoard, null, ACTION_TYPE.NONE);
+        Hashtable<String, Boolean> initHash = new Hashtable<>();
+        initHash.put(Cell.getStart().toString(), true);
+        Node start = new Node(Cell.getStart(), Cell.getStart().getValue(), Cell.getGoal().getValue(), gameBoard, null, initHash);
         BFS bfs = new BFS();
         bfs.search(start);
     }

@@ -3,32 +3,30 @@ package model;
 import core.Constants;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class Node {
     public Board board;
-    // TODO: 2/18/2022  never used, you can remove these 2 lines and related logics.
-    public static boolean isStartSet = false;
-    public boolean isStart = false;
     public int sum = 0;
     public Node parent;
     public Cell currentCell;
-    public ACTION_TYPE previousAction;
     private Cell[][] cells;
     private int goalValue;
+    private Hashtable<String, Boolean> repeatedStates;
 
-    public Node(Cell currentCell, int currentValue, int goalValue, Board board, Node parent, ACTION_TYPE previousAction) {
-        if (!isStartSet && currentCell.getOperationType() == OPERATION_TYPE.START) {
-            this.isStart = true;
-            isStartSet = true;
-        }
+    public Node(Cell currentCell, int currentValue, int goalValue, Board board, Node parent, Hashtable<String, Boolean> repeated) {
         this.currentCell = currentCell;
         this.sum = currentValue;
         this.board = board;
         this.cells = board.getCells();
         this.parent = parent;
-        this.previousAction = previousAction;
         this.goalValue = goalValue;
+        Hashtable<String, Boolean> hashtableTemp = new Hashtable<String, Boolean>(repeated);
+        hashtableTemp.put(this.toString(), true);
+        this.repeatedStates = hashtableTemp;
         setGoalValue();
+
+        repeated.put(this.toString(), true);
     }
 
 
@@ -36,34 +34,34 @@ public class Node {
         ArrayList<Node> result = new ArrayList<Node>();
         if (canMoveRight()) {
             Cell rightCell = this.cells[this.currentCell.i][this.currentCell.j + 1];
-            if (rightCell != Cell.getStart() && !isWall(rightCell) && previousAction != ACTION_TYPE.RIGHT) {
+            if (rightCell != Cell.getStart() && !isWall(rightCell) && !repeatedStates.containsKey(rightCell.toString())) {
                 int calculatedValue = calculate(rightCell);
-                Node rightNode = new Node(rightCell, calculatedValue, goalValue, board, this, ACTION_TYPE.LEFT);
+                Node rightNode = new Node(rightCell, calculatedValue, goalValue, board, this, repeatedStates);
                 result.add(rightNode);
             }
         }
         if (canMoveLeft()) {
             Cell leftCell = this.cells[this.currentCell.i][this.currentCell.j - 1];
-            if (leftCell != Cell.getStart() && !isWall(leftCell) && previousAction != ACTION_TYPE.LEFT) {
+            if (leftCell != Cell.getStart() && !isWall(leftCell) && !repeatedStates.containsKey(leftCell.toString())) {
                 int calculatedValue = calculate(leftCell);
-                Node leftNode = new Node(leftCell, calculatedValue, goalValue, board, this, ACTION_TYPE.RIGHT);
+                Node leftNode = new Node(leftCell, calculatedValue, goalValue, board, this, repeatedStates);
                 result.add(leftNode);
             }
         }
         if (canMoveDown()) {
             Cell downCell = this.cells[this.currentCell.i + 1][this.currentCell.j];
-            if (downCell != Cell.getStart() && !isWall(downCell) && previousAction != ACTION_TYPE.DOWN) {
+            if (downCell != Cell.getStart() && !isWall(downCell) && !repeatedStates.containsKey(downCell.toString())) {
                 int calculatedValue = calculate(downCell);
-                Node downNode = new Node(downCell, calculatedValue, goalValue, board, this, ACTION_TYPE.UP);
+                Node downNode = new Node(downCell, calculatedValue, goalValue, board, this, repeatedStates);
                 result.add(downNode);
             }
 
         }
         if (canMoveUp()) {
             Cell upCell = this.cells[this.currentCell.i - 1][this.currentCell.j];
-            if (upCell != Cell.getStart() && !isWall(upCell) && previousAction != ACTION_TYPE.UP) {
+            if (upCell != Cell.getStart() && !isWall(upCell) && !repeatedStates.containsKey(upCell.toString())) {
                 int calculatedValue = calculate(upCell);
-                Node upNode = new Node(upCell, calculatedValue, goalValue, board, this, ACTION_TYPE.DOWN);
+                Node upNode = new Node(upCell, calculatedValue, goalValue, board, this, repeatedStates);
                 result.add(upNode);
             }
         }

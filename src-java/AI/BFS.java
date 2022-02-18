@@ -38,6 +38,7 @@ public class BFS {
             }
         }
 
+        System.out.println("no solution");
 
     }
 

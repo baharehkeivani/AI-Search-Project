@@ -35,4 +35,8 @@ public class Cell {
         return operationType;
     }
 
+    @Override
+    public String toString() {
+        return "(" + this.i + "," + this.j + ")";
+    }
 }
