@@ -1,3 +1,5 @@
+import copy
+
 from Board import Board
 from Cell import Cell
 
@@ -7,6 +9,7 @@ class Find:
         self.board = board
         self.source = self.__find_source()
         self.goal = self.__find_goal()
+        self.explored = []
 
     def __find_source(self):
         for row in range(self.board.m):
@@ -20,30 +23,45 @@ class Find:
                 if self.__get_opt(row, col).lower() == 'g':
                     return [row, col]
 
-    def __get_opt(self, row: int, col: int):
+    def __get_opt(self, row: int, col: int) -> str:
         return self.board.cells[row][col][0].lower()
 
-    def __get_number(self, row: int, col: int):
+    def __get_number(self, row: int, col: int) -> int:
         return int(self.board.cells[row][col][1:])
 
-    def __successor(self, row: int, col: int):
+    def __successor(self, cell: Cell) -> list:
         cells = []
+        if cell.row > 0:
+            if self.__get_opt(cell.row - 1, cell.col) != 'w':
+                c = Cell(cell.row - 1, cell.col, copy.deepcopy(cell.table), 0, 0, cell.path.copy())
+                c.path.append(c)
+                c.path_value, c.goal_value = self.__cal_opt(cell.path_value, cell.goal_value, c.row, c.col)
+                if not self.explored.__contains__(c.__hash__()):
+                    cells.append(c)
 
-        if row > 0:
-            if self.__get_opt(row - 1, col) != 'w':
-                cells.append(Cell(row - 1, col, [], 0, 0))
+        if cell.col > 0:
+            if self.__get_opt(cell.row, cell.col - 1) != 'w':
+                c = Cell(cell.row, cell.col - 1, copy.deepcopy(cell.table), 0, 0, cell.path.copy())
+                c.path.append(c)
+                c.path_value, c.goal_value = self.__cal_opt(cell.path_value, cell.goal_value, c.row, c.col)
+                if not self.explored.__contains__(c.__hash__()):
+                    cells.append(c)
 
-        if col > 0:
-            if self.__get_opt(row, col - 1) != 'w':
-                cells.append(Cell(row, col - 1, [], 0, 0))
+        if cell.row < self.board.m - 1:
+            if self.__get_opt(cell.row + 1, cell.col) != 'w':
+                c = Cell(cell.row + 1, cell.col, copy.deepcopy(cell.table), 0, 0, cell.path.copy())
+                c.path.append(c)
+                c.path_value, c.goal_value = self.__cal_opt(cell.path_value, cell.goal_value, c.row, c.col)
+                if not self.explored.__contains__(c.__hash__()):
+                    cells.append(c)
 
-        if row < self.board.m - 1:
-            if self.__get_opt(row + 1, col) != 'w':
-                cells.append(Cell(row + 1, col, [], 0, 0))
-
-        if col < self.board.n - 1:
-            if self.__get_opt(row, col + 1) != 'w':
-                cells.append(Cell(row, col + 1, [], 0, 0))
+        if cell.col < self.board.n - 1:
+            if self.__get_opt(cell.row, cell.col + 1) != 'w':
+                c = Cell(cell.row, cell.col + 1, copy.deepcopy(cell.table), 0, 0, cell.path.copy())
+                c.path.append(c)
+                c.path_value, c.goal_value = self.__cal_opt(cell.path_value, cell.goal_value, c.row, c.col)
+                if not self.explored.__contains__(c.__hash__()):
+                    cells.append(c)
 
         return cells
 
@@ -65,7 +83,7 @@ class Find:
 
         return path_sum, goal_value
 
-    def __check_goal(self, cell: Cell):
+    def __check_goal(self, cell: Cell) -> bool:
         if cell.path_value > cell.goal_value:
             self.__print_solution(cell)
             return True
@@ -74,32 +92,32 @@ class Find:
     def bfs_search(self):
         queue = []
 
-        queue.append(Cell(self.source[0], self.source[1], [], self.__get_number(self.source[0], self.source[1]),
-                          self.__get_number(self.goal[0], self.goal[1])))
+        queue.append(
+            Cell(self.source[0], self.source[1], [[False for x in range(self.board.m)] for y in range(self.board.n)],
+                 self.__get_number(self.source[0], self.source[1]),
+                 self.__get_number(self.goal[0], self.goal[1]), []))
 
         queue[0].path.append(queue[0])
 
         while len(queue) > 0:
             cell = queue.pop(0)
-            neighbors = self.__successor(cell.row, cell.col)
+            self.explored.append(cell.__hash__())
+            neighbors = self.__successor(cell)
 
             for c in neighbors:
                 if c.row == self.goal[0] and c.col == self.goal[1]:
                     if self.__check_goal(cell):
                         return
-
-                elif not cell.path.__contains__(c):
-                    c.path = cell.path.copy()
-                    c.path.append(c)
-                    c.path_value, c.goal_value = self.__cal_opt(cell.path_value, cell.goal_value, c.row, c.col)
-                    queue.append(c)
+                else:
+                    if not cell.table[c.row][c.col]:
+                        queue.append(c)
 
         print('no solution!!!')
 
     def __print_solution(self, cell: Cell):
-        cell.path.pop(0)
+        print(len(cell.path))
 
-        print(len(cell.path) + 1)
+        cell.path.pop(0)
 
         for p in cell.path:
             print(str(p.row + 1) + ' ' + str(p.col + 1))
