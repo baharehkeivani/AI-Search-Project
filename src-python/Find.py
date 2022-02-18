@@ -20,13 +20,13 @@ class Find:
                 if self.__get_opt(row, col).lower() == 'g':
                     return [row, col]
 
-    def __get_opt(self, row: int, col: int):
+    def __get_opt(self, row: int, col: int) -> str:
         return self.board.cells[row][col][0].lower()
 
-    def __get_number(self, row: int, col: int):
+    def __get_number(self, row: int, col: int) -> int:
         return int(self.board.cells[row][col][1:])
 
-    def __successor(self, row: int, col: int):
+    def __successor(self, row: int, col: int) -> list:
         cells = []
 
         if row > 0:
@@ -65,7 +65,7 @@ class Find:
 
         return path_sum, goal_value
 
-    def __check_goal(self, cell: Cell):
+    def __check_goal(self, cell: Cell) -> bool:
         if cell.path_value > cell.goal_value:
             self.__print_solution(cell)
             return True
@@ -73,6 +73,7 @@ class Find:
 
     def bfs_search(self):
         queue = []
+        explored = []
 
         queue.append(Cell(self.source[0], self.source[1], [], self.__get_number(self.source[0], self.source[1]),
                           self.__get_number(self.goal[0], self.goal[1])))
@@ -81,18 +82,19 @@ class Find:
 
         while len(queue) > 0:
             cell = queue.pop(0)
+            explored.append(cell.__hash__())
             neighbors = self.__successor(cell.row, cell.col)
 
             for c in neighbors:
                 if c.row == self.goal[0] and c.col == self.goal[1]:
                     if self.__check_goal(cell):
                         return
-
-                elif not cell.path.__contains__(c):
+                else:
                     c.path = cell.path.copy()
                     c.path.append(c)
                     c.path_value, c.goal_value = self.__cal_opt(cell.path_value, cell.goal_value, c.row, c.col)
-                    queue.append(c)
+                    if not cell.path.__contains__(c) and not explored.__contains__(c.__hash__()):
+                        queue.append(c)
 
         print('no solution!!!')
 

@@ -12,3 +12,12 @@ class Cell:
         if other.row == self.row and other.col == self.col:
             return True
         return False
+
+    def __get_sorted_path(self) -> list:
+        sorted_path = self.path.copy()
+        sorted_path.sort(key=lambda x: (x.row, x.col))
+        return sorted_path
+
+    def __hash__(self):
+        return ' '.join([str(x) for x in self.__get_sorted_path()]) + '###' + str(self.path_value) + ' ' + str(
+            self.goal_value)
