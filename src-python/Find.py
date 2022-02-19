@@ -93,7 +93,7 @@ class Find:
         queue = []
 
         queue.append(
-            Cell(self.source[0], self.source[1], [[False for x in range(self.board.m)] for y in range(self.board.n)],
+            Cell(self.source[0], self.source[1], [[False for x in range(self.board.n)] for y in range(self.board.m)],
                  self.__get_number(self.source[0], self.source[1]),
                  self.__get_number(self.goal[0], self.goal[1]), []))
 
