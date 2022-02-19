@@ -34,7 +34,7 @@ public class Node {
         ArrayList<Node> result = new ArrayList<Node>();
         if (canMoveRight()) {
             Cell rightCell = this.cells[this.currentCell.i][this.currentCell.j + 1];
-            if (rightCell != Cell.getStart() && !isWall(rightCell) && !repeatedStates.containsKey(rightCell.toString())) {
+            if (rightCell != Cell.getStart() && canEnterGoal(rightCell) && !isWall(rightCell) && !repeatedStates.containsKey(rightCell.toString())) {
                 int calculatedValue = calculate(rightCell);
                 Node rightNode = new Node(rightCell, calculatedValue, goalValue, board, this, repeatedStates);
                 result.add(rightNode);
@@ -42,7 +42,7 @@ public class Node {
         }
         if (canMoveLeft()) {
             Cell leftCell = this.cells[this.currentCell.i][this.currentCell.j - 1];
-            if (leftCell != Cell.getStart() && !isWall(leftCell) && !repeatedStates.containsKey(leftCell.toString())) {
+            if (leftCell != Cell.getStart() && canEnterGoal(leftCell) && !isWall(leftCell) && !repeatedStates.containsKey(leftCell.toString())) {
                 int calculatedValue = calculate(leftCell);
                 Node leftNode = new Node(leftCell, calculatedValue, goalValue, board, this, repeatedStates);
                 result.add(leftNode);
@@ -50,7 +50,7 @@ public class Node {
         }
         if (canMoveDown()) {
             Cell downCell = this.cells[this.currentCell.i + 1][this.currentCell.j];
-            if (downCell != Cell.getStart() && !isWall(downCell) && !repeatedStates.containsKey(downCell.toString())) {
+            if (downCell != Cell.getStart() && canEnterGoal(downCell) && !isWall(downCell) && !repeatedStates.containsKey(downCell.toString())) {
                 int calculatedValue = calculate(downCell);
                 Node downNode = new Node(downCell, calculatedValue, goalValue, board, this, repeatedStates);
                 result.add(downNode);
@@ -59,13 +59,21 @@ public class Node {
         }
         if (canMoveUp()) {
             Cell upCell = this.cells[this.currentCell.i - 1][this.currentCell.j];
-            if (upCell != Cell.getStart() && !isWall(upCell) && !repeatedStates.containsKey(upCell.toString())) {
+            if (upCell != Cell.getStart() && canEnterGoal(upCell) && !isWall(upCell) && !repeatedStates.containsKey(upCell.toString())) {
                 int calculatedValue = calculate(upCell);
                 Node upNode = new Node(upCell, calculatedValue, goalValue, board, this, repeatedStates);
                 result.add(upNode);
             }
         }
         return result;
+    }
+
+    private boolean canEnterGoal(Cell downCell) {
+        if (downCell != Cell.getGoal()) return true;
+        else {
+            return sum >= goalValue;
+        }
+
     }
 
 
