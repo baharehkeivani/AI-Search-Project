@@ -6,3 +6,7 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+
+#user related files
+**/.idea/workspace.xml
+**/.idea/tasks.xml
