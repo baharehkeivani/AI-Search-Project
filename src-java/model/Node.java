@@ -25,8 +25,6 @@ public class Node {
         hashtableTemp.put(this.toString(), true);
         this.repeatedStates = hashtableTemp;
         setGoalValue();
-
-        repeated.put(this.toString(), true);
     }
 
 
