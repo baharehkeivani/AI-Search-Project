@@ -5,9 +5,15 @@ import core.Constants;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+
 public class Node {
     public Board board;
     public int sum = 0;
+    public int h = 0;
+    public int g = 0;
+    public int g_idsa = 0;
     public Node parent;
     public Cell currentCell;
     private Cell[][] cells;
@@ -25,8 +31,8 @@ public class Node {
         hashtableTemp.put(this.toString(), true);
         this.repeatedStates = hashtableTemp;
         setGoalValue();
+        this.h = heuristic();
     }
-
 
     public ArrayList<Node> successor() {
         ArrayList<Node> result = new ArrayList<Node>();
@@ -35,6 +41,8 @@ public class Node {
             if (isValidMove(rightCell)) {
                 int calculatedValue = calculate(rightCell);
                 Node rightNode = new Node(rightCell, calculatedValue, goalValue, board, this, repeatedStates);
+                rightNode.g = pathCost(rightCell);
+                rightNode.g_idsa = g_idsa + 1;
                 result.add(rightNode);
             }
         }
@@ -43,6 +51,8 @@ public class Node {
             if (isValidMove(leftCell)) {
                 int calculatedValue = calculate(leftCell);
                 Node leftNode = new Node(leftCell, calculatedValue, goalValue, board, this, repeatedStates);
+                leftNode.g = pathCost(leftCell);
+                leftNode.g_idsa = g_idsa + 1;
                 result.add(leftNode);
             }
         }
@@ -51,6 +61,8 @@ public class Node {
             if (isValidMove(downCell)) {
                 int calculatedValue = calculate(downCell);
                 Node downNode = new Node(downCell, calculatedValue, goalValue, board, this, repeatedStates);
+                downNode.g = pathCost(downCell);
+                downNode.g_idsa = g_idsa + 1;
                 result.add(downNode);
             }
 
@@ -60,6 +72,8 @@ public class Node {
             if (isValidMove(upCell)) {
                 int calculatedValue = calculate(upCell);
                 Node upNode = new Node(upCell, calculatedValue, goalValue, board, this, repeatedStates);
+                upNode.g = pathCost(upCell);
+                upNode.g_idsa = g_idsa + 1;
                 result.add(upNode);
             }
         }
@@ -67,13 +81,11 @@ public class Node {
     }
 
     private boolean canEnterGoal(Cell downCell) {
-        if (downCell != Cell.getGoal()) return true;
+        if (downCell != board.getGoal()) return true;
         else {
             return sum >= goalValue;
         }
-
     }
-
 
     private int calculate(Cell cell) {
         return switch (cell.getOperationType()) {
@@ -83,7 +95,6 @@ public class Node {
             case MULT -> sum * cell.getValue();
             default -> sum;
         };
-
     }
 
     private boolean isWall(Cell cell) {
@@ -107,30 +118,34 @@ public class Node {
     }
 
     private Boolean isValidMove(Cell destCell) {
-        return destCell != Cell.getStart() && canEnterGoal(destCell) && !isWall(destCell) && !repeatedStates.containsKey(destCell.toString());
+        return destCell != board.getStart() && canEnterGoal(destCell) && !isWall(destCell) && !repeatedStates.containsKey(destCell.toString());
     }
 
     public boolean isGoal() {
         if (currentCell.getOperationType() == OPERATION_TYPE.GOAL) {
-            return sum >= goalValue;
+            return sum > goalValue;
         }
         return false;
     }
 
-    public int pathCost() {
-        return switch (currentCell.getOperationType()) {
-            case MINUS, DECREASE_GOAL -> 1;
-            case ADD, INCREASE_GOAL -> 2;
-            case MULT -> 3;
-            case POW -> 4;
+    public int pathCost(Cell cell) {
+        return switch (cell.getOperationType()) {
+            case MINUS, DECREASE_GOAL, GOAL -> g + 1;
+            case ADD, INCREASE_GOAL -> g + 2;
+            case MULT -> g + 5;
+            case POW -> g + 11;
             default -> 0;
         };
-
     }
 
+    // Manhattan distance --> sum of the distance between rows and the distance between columns.
+    // x(i,j) and goal(r,c)
+    // x == currentNode
+    // h(x) = abs(r-i)  +  abs(c-j)
+    // we can only move up , down , right , left
+    // each cell's value and op = *1
     private int heuristic() {
-        // TODO: 2/16/2022 implement heuristic function
-        return 0;
+        return abs(board.getGoal().i - currentCell.i) + abs(board.getGoal().j - currentCell.j);
     }
 
     public String hash() {

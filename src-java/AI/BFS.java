@@ -1,5 +1,6 @@
 package AI;
 
+import core.main;
 import model.Node;
 
 import java.util.ArrayList;
@@ -8,15 +9,20 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class BFS {
+    private final Node startNode;
 
-    public void search(Node startNode) {
+    public BFS(Node start) {
+        this.startNode = start;
+    }
+
+    public int search() {
         Queue<Node> frontier = new LinkedList<Node>();
         Hashtable<String, Boolean> inFrontier = new Hashtable<>();
         Hashtable<String, Boolean> explored = new Hashtable<>();
         if (startNode.isGoal()) {
             System.out.println("score : " + startNode.sum);
-            printResult(startNode, 0);
-            return;
+            main.printResult(startNode, 0);
+            return 1;
         }
         frontier.add(startNode);
         inFrontier.put(startNode.hash(), true);
@@ -28,30 +34,16 @@ public class BFS {
             for (Node child : children) {
                 if (!(inFrontier.containsKey(child.hash())) && !(explored.containsKey(child.hash()))) {
                     if (child.isGoal()) {
-                        printResult(child, 0);
+                        main.printResult(child, 0);
                         System.out.println(child.sum);
-                        return;
+                        return 1;
                     }
                     frontier.add(child);
                     inFrontier.put(child.hash(), true);
                 }
             }
         }
-
         System.out.println("no solution");
-
+        return -1;
     }
-
-    public void printResult(Node node, int depthCounter) {
-        if (node.parent == null) {
-            System.out.println("problem solved at a depth of  : " + depthCounter);
-            return;
-        }
-
-        System.out.println(node.toString());
-        node.drawState();
-        printResult(node.parent, depthCounter + 1);
-    }
-
-
 }

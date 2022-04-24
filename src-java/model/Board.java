@@ -6,12 +6,15 @@ public class Board {
     private int row;
     private int col;
     private Cell[][] cells;
+    private final Cell start;
+    private final Cell goal;
 
-    public Board(int row, int col, Cell[][] cells) {
+    public Board(int row, int col, Cell[][] cells, Cell start, Cell goal) {
         this.row = row;
         this.col = col;
         this.cells = cells;
-
+        this.goal = goal;
+        this.start = start;
     }
 
     public int getCol() {
@@ -24,6 +27,14 @@ public class Board {
 
     public Cell[][] getCells() {
         return cells;
+    }
+
+    public Cell getGoal() {
+        return goal;
+    }
+
+    public Cell getStart() {
+        return start;
     }
 
     @Override
