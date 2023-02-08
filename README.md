@@ -1,5 +1,7 @@
 # AI-Search-Project
 
+*** FUM AI Project Spring 2022 ***
+
 We have a board of dimensions m * n.
 The object of the game is to reach the goal element starting from start element.
 In the start and the goal elements, a value is set, and in the rest of the houses, a value is set with an operator.
